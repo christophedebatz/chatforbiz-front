@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import ChatContainer from './Container/ChatContainer';
+import MainContainer from './Container/MainContainer';
 
-ReactDOM.render(<ChatContainer />, document.getElementById('root'));
+ReactDOM.render(<MainContainer />, document.getElementById('root'));

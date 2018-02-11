@@ -1,36 +1,74 @@
 import React, { Component } from 'react';
-import socketIO from "socket.io-client";
-import '../App.css';
+import openSocket from 'socket.io-client';
+import PropTypes from 'prop-types';
 import ChatWindow from '../Component/ChatWindow';
+import ChatWriter from '../Component/ChatWriter';
+import '../index.css';
 
-class ChatContainer extends Component {
+export default class ChatContainer extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.onMessage = this.onMessage.bind(this);
+    this.createSocket = this.createSocket.bind(this);
+    this.scrollToLastMessage = this.scrollToLastMessage.bind(this);
     this.state = {
       response: null,
-      endpoint: 'http://127.0.0.1:3000'
     };
   }
 
   componentDidMount() {
-    const { endpoint } = this.state;
-    const socket = socketIO(endpoint);
-    socket.on('message', response => this.setState({ response }));
+    this.scrollToLastMessage();
+    this.createSocket();
+    this.socket.emit('action', JSON.stringify(this.props.user));
+    this.socket.on('message', response => {
+      if (response.error) {
+        return this.props.onSendingError(response.error);
+      }
+      this.setState({ response });
+    });
+  }
+
+  onMessage(message) {
+    return new Promise((resolve, reject) => {
+      if (this.socket) {
+        this.socket.emit('message', { user: this.props.user, text: message });
+      } else {
+        this.createSocket();
+      }
+      this.scrollToLastMessage();
+      return resolve();
+    });
+  }
+
+  createSocket() {
+    this.socket = openSocket('http://127.0.0.1:3001');
+  }
+
+  scrollToLastMessage() {
+    this.chatEndDiv.scrollIntoView({ behavior: 'smooth' });
   }
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to Chat4Biz</h1>
-        </header>
-        {this.state.response ?
-          <ChatWindow message={this.state.response} />
-          : "No messages" }
+      <div className="chat-container">
+        <div className="chat">
+          <ChatWindow message={this.state.response} user={this.props.user} />
+          <div
+            style={{ paddingTop: '10px', clear: 'both' }}
+            ref={el => { this.chatEndDiv = el; }}
+          >
+        </div>
+        </div>
+        <div className="form">
+          <ChatWriter onMessage={this.onMessage} />
+        </div>
       </div>
     );
   }
 }
 
-export default ChatContainer;
+ChatContainer.propTypes = {
+  user: PropTypes.object.isRequired,
+  onSendingError: PropTypes.func.isRequired
+};
