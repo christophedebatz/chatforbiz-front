@@ -6,6 +6,7 @@ import Loader from '../Component/Loader';
 import ApiException from '../Service/ApiException';
 import ChatContainer from './ChatContainer';
 import { chatStore } from '../Store/chatStore';
+import logo from '../Assets/logo.png';
 
 export default class MainContainer extends Component {
 
@@ -125,7 +126,7 @@ export default class MainContainer extends Component {
     }
     else if (!this.state.user) {
       nameMarkup = (
-        <div className="name-entry">
+        <div>
           <ToastContainer autoClose={3000} />
           <p className="name-caption">Please enter your name to access room</p>
           <input
@@ -146,7 +147,12 @@ export default class MainContainer extends Component {
     else {
       footerMarkup = (
         <footer>
-          <a onClick={this.onLogout}>Logout</a>
+          <input
+            type="button"
+            className="logout"
+            onClick={this.onLogout}
+            value="Logout"
+          />
         </footer>
       );
       chatMarkup = (
@@ -162,9 +168,12 @@ export default class MainContainer extends Component {
     return (
       <div className="App">
         <header className="App-header"></header>
-        {nameMarkup}
-        {loaderMarkup}
-        {chatMarkup}
+        <div className="container">
+          <img src={logo} />
+          {nameMarkup}
+          {loaderMarkup}
+          {chatMarkup}
+        </div>
         {footerMarkup}
       </div>
     );

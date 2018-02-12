@@ -13,7 +13,7 @@ export default class ChatContainer extends Component {
     this.onMessage = this.onMessage.bind(this);
     this.createSocket = this.createSocket.bind(this);
     this.scrollToLastMessage = this.scrollToLastMessage.bind(this);
-    
+
     this.state = {
       response: null,
       previousMessages: []
@@ -68,10 +68,10 @@ export default class ChatContainer extends Component {
             user={this.props.user}
           />
           <div
-            style={{ paddingTop: '10px', clear: 'both' }}
+            style={{ paddingTop: '65px', clear: 'both' }}
             ref={el => { this.chatEndDiv = el; }}
           >
-        </div>
+          </div>
         </div>
         <div className="form">
           <ChatWriter onMessage={this.onMessage} />

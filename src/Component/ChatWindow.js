@@ -8,9 +8,7 @@ export default class ChatWindow extends Component {
 
   constructor(props) {
     super(props);
-    const concatMessages = this.props.oldMessages.concat(chatStore.getMessages());
-    const messages = [...new Set(concatMessages.map(item => item.id))];
-    this.state = { messages };
+    this.state = { messages: [] };
     this.oldLoaded = false;
   }
 
@@ -18,16 +16,15 @@ export default class ChatWindow extends Component {
     if (newProps && newProps.oldMessages.length > 0) {
       if (!this.oldLoaded) {
         this.oldLoaded = true;
+        chatStore.clear();
         newProps.oldMessages.forEach(message => {
           chatStore.addMessage(message);
         });
       }
     }
-
     if (newProps && newProps.message) {
       chatStore.addMessage(newProps.message);
     }
-
     this.setState({ messages: chatStore.getMessages() });
   }
 

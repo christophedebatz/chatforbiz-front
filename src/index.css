@@ -4,7 +4,7 @@ body {
   font-family: 'Source Code Pro', sans-serif;
   background-color: #6d8a9b;
   font-size: 13px;
-  margin-top: 100px;
+  margin-top: 20px;
 }
 
 .App-header {
@@ -19,11 +19,13 @@ body {
   text-align: center;
 }
 
-.name-entry {
+.container{
   border: 1px solid #2a3436;
   margin: auto;
   max-width: 50%;
-  padding: 50px;
+  padding: 20px;
+  padding-bottom: 40px;
+  padding-top: 10px;
   background-color: #526568;
   text-align: center;
 }
@@ -33,7 +35,12 @@ input, button {
   border: 1px solid white;
   border-radius: 5px;
   margin: 2px;
-  font-family: 'Source Code Pro', sans-serif;
+}
+
+.logout {
+  background-color: #64001e;
+  color: white;
+  padding: 4px;
 }
 
 button {
@@ -52,10 +59,11 @@ button {
 .chat {
   margin: auto;
   border-radius: 20px;
-  padding: 30px;
+  border: 1px solid black;
+  padding: 20px;
   width: 450px;
   height: 100%;
-  max-height: 350px;
+  max-height: 320px;
   overflow: auto;
   background-color: #85a2a7;
 }
@@ -96,4 +104,9 @@ button {
 
 .form {
   margin: 20px;
+}
+
+footer {
+  margin: 10px;
+  text-align: center;
 }
