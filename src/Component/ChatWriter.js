@@ -27,7 +27,7 @@ export default class ChatWriter extends Component {
     return (
       <div>
         <input
-          size="60"
+          className="input-writer"
           type="text"
           placeholder="Your message"
           value={this.state.text}

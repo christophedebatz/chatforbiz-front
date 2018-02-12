@@ -61,11 +61,15 @@ button {
   border-radius: 20px;
   border: 1px solid black;
   padding: 20px;
-  width: 450px;
+  width: 70%;
   height: 100%;
   max-height: 320px;
   overflow: auto;
   background-color: #85a2a7;
+}
+
+.input-writer {
+  width: 40%;
 }
 
 .bubble {
