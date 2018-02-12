@@ -7,7 +7,7 @@ export const chatStore = {
   },
 
   getMessages: () => {
-    return JSON.parse(localStorage.getItem('chat:messages')) || [];
+    return JSON.parse(localStorage.getItem('chat:messages')) || [];
   },
 
   clear: () => {

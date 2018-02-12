@@ -8,42 +8,57 @@ export default class ChatWindow extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      messages: chatStore.getMessages()
-    };
+    const concatMessages = this.props.oldMessages.concat(chatStore.getMessages());
+    const messages = [...new Set(concatMessages.map(item => item.id))];
+    this.state = { messages };
+    this.oldLoaded = false;
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps) {
-      chatStore.addMessage(newProps);
-      this.setState({ messages: chatStore.getMessages() });
+    if (newProps && newProps.oldMessages.length > 0) {
+      if (!this.oldLoaded) {
+        this.oldLoaded = true;
+        newProps.oldMessages.forEach(message => {
+          chatStore.addMessage(message);
+        });
+      }
     }
+
+    if (newProps && newProps.message) {
+      chatStore.addMessage(newProps.message);
+    }
+
+    this.setState({ messages: chatStore.getMessages() });
   }
 
   render() {
     return (
       <div>
-        {this.state.messages.map((item, index) => {
-          const m = moment(item.message.creationDate);
+        {this.state.messages.map((message, index) => {
+          const m = moment(message.creationDate);
           const date = m.format('DD/MM');
-          const time = m.format('hh:mm');
-          if (item.message.user.id === this.props.user.id) {
+          const time = m.format('HH:mm');
+          if (message.user && message.user.id === this.props.user.id) {
             return (
-              <div className="clear">
-              <div className="date">The {date} at {time}</div>
-                <div className="bubble me" key={index}>
-                  <span className="name">You</span>
-                  <div className="text">{item.message.text}</div>
+              <div key={index}>
+                <div className="clear">
+                <div className="date">The {date} at {time}</div>
+                  <div className="bubble me">
+                    <span className="name">You</span>
+                    <div className="text">{message.text}</div>
+                  </div>
                 </div>
               </div>
             );
           }
           return (
-            <div className="clear">
-            <div className="date">The {date} at {time}</div>
-              <div className="bubble" key={index}>
-                <span className="name">{item.message.name}</span>
-                <div className="text">{item.message.text}</div>
+            <div key={index}>
+              <div className="clear">
+              <div className="date">The {date} at {time}</div>
+                <div className="bubble">
+                  <span className="name">{message.name}</span>
+                  <div className="text">{message.text}</div>
+                </div>
               </div>
             </div>
           );

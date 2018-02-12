@@ -19,6 +19,7 @@ export default class MainContainer extends Component {
     this.onSendingError = this.onSendingError.bind(this);
     this.onEnterName = this.onEnterName.bind(this);
     this.onLogout = this.onLogout.bind(this);
+    this.treatError = this.treatError.bind(this);
 
     this.state = {
       name: '',
@@ -42,9 +43,7 @@ export default class MainContainer extends Component {
           .catch(err => {
             chatStore.clear();
             localStorage.removeItem(MainContainer.getUserLocalStorageKey());
-            this.setState({ isLoading: false });
-            const message = MainContainer.createMessage(err.getCode());
-            toast.error(message, { position: toast.POSITION.TOP_RIGHT });
+            this.treatError(err);
           });
       });
     }
@@ -59,11 +58,7 @@ export default class MainContainer extends Component {
             localStorage.setItem(MainContainer.getUserLocalStorageKey(), JSON.stringify(user));
             this.setState({ user, isLoading: false });
           })
-          .catch(err => {
-            this.setState({ isLoading: false });
-            const message = MainContainer.createMessage(err.getCode());
-            toast.error(message, { position: toast.POSITION.TOP_RIGHT });
-          });
+          .catch(this.treatError);
       });
     }
   }
@@ -76,13 +71,15 @@ export default class MainContainer extends Component {
       this.setState({ isLoading: true }, () => {
         userService.removeUser(user.id, user.token)
           .then(() => this.setState({ user: null, isLoading: false }))
-          .catch(err => {
-            this.setState({ isLoading: false });
-            const message = MainContainer.createMessage(err.getCode());
-            toast.error(message, { position: toast.POSITION.TOP_RIGHT });
-          });
+          .catch(this.treatError);
         });
     }
+  }
+
+  treatError(err) {
+    this.setState({ isLoading: false });
+    const message = MainContainer.createMessage(err.getCode());
+    toast.error(message, { position: toast.POSITION.TOP_RIGHT });
   }
 
   onEnterName(e) {
@@ -164,9 +161,7 @@ export default class MainContainer extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to Chat4Biz</h1>
-        </header>
+        <header className="App-header"></header>
         {nameMarkup}
         {loaderMarkup}
         {chatMarkup}
