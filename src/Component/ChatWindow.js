@@ -63,7 +63,6 @@ export default class ChatWindow extends Component {
       </div>
     );
   }
-
 }
 
 ChatWindow.propTypes = {

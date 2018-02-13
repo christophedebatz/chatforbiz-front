@@ -20,7 +20,11 @@ export default class ChatWriter extends Component {
   }
 
   onChange(e) {
-    this.setState({ text: e.target.value });
+    this.setState({ text: e.target.value }, () => {
+      if (this.props.onType && this.state.text.length > 0) {
+        this.props.onType();
+      }
+    });
   }
 
   render() {
@@ -40,5 +44,6 @@ export default class ChatWriter extends Component {
 }
 
 ChatWriter.propTypes = {
-  onMessage: PropTypes.func.isRequired
+  onMessage: PropTypes.func.isRequired,
+  onType: PropTypes.func
 };
